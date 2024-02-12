@@ -19,6 +19,9 @@
 
     .link-container {
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .link-button {
@@ -58,7 +61,6 @@
     }
 
     @media screen and (max-width: 600px) {
-      /* Pengaturan tata letak untuk layar berukuran kecil */
       .link-button {
         padding: 12px 20px;
         font-size: 14px;
@@ -72,6 +74,11 @@
       .profile-caption {
         font-size: 14px;
       }
+    }
+
+    .additional-info {
+      margin-top: 20px;
+      font-size: 16px;
     }
   </style>
 </head>
@@ -90,6 +97,7 @@
   <a href="https://www.facebook.com/akun-fb-8" class="link-button">Facebook Ke-8</a>
   <a href="https://www.facebook.com/akun-fb-9" class="link-button">Facebook Ke-9</a>
   <a href="https://www.facebook.com/akun-fb-10" class="link-button">Facebook Ke-10</a>
+  <p class="additional-info">Silahkan:</p>
 </div>
 
 </body>
