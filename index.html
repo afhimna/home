@@ -1,195 +1,821 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AFHIMNA</title>
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      background-color: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis Nahwu</title>
 
-    .link-container {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
 
-    .link-button {
-      display: inline-block;
-      margin: 10px;
-      padding: 15px 30px;
-      text-decoration: none;
-      color: #fff;
-      border: 2px solid #fff;
-      border-radius: 5px;
-      font-size: 18px;
-      transition: background-color 0.3s, color 0.3s, transform 0.3s;
-      min-width: 150px; /* Menambahkan lebar minimum pada tombol */
-    }
-
-    .link-button:hover {
-      background-color: #fff;
-      color: #000;
-      transform: scale(1.05);
-    }
-
-    .profile-image {
-      display: block;
-      margin: 20px auto;
-      border-radius: 50%;
-      width: 200px;
-      height: 200px;
-      transition: opacity 0.3s;
-    }
-
-    .profile-image:hover {
-      opacity: 0.8;
-    }
-
-    .profile-caption {
-      margin-top: 10px;
-      font-size: 16px;
-    }
-
-    @media screen and (max-width: 600px) {
-      .link-button {
-        padding: 12px 20px;
-        font-size: 14px;
-        min-width: 120px; /
-      }
-
-      .profile-image {
-        width: 150px;
-        height: 150px;
-      }
-
-      .profile-caption {
-        font-size: 14px;
-      }
-    }
-
-    .additional-info {
-      margin-top: 20px;
-      font-size: 16px;
-    }
-    /* ===== SOWAR / SOCIAL ===== */
-.social-container{
-  margin-top:26px;
-  text-align:center;
-}
-
-.social-container p{
-  font-size:13px;
-  color:#bbb;
-  margin-bottom:14px;
-}
-
-.social-icons{
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  background:radial-gradient(circle at top,#020617,#000);
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:24px;
+  color:#e5e7eb;
+  font-family:"Times New Roman",serif;
+  opacity:0;
+  transition:opacity .8s ease;
+}
+body.page-ready{opacity:1}
+
+.quiz-box{
+  width:100%;
+  max-width:720px;
+  background:rgba(2,6,23,.96);
+  border:1px solid #1e293b;
+  border-radius:22px;
+  padding:25px;
+  box-shadow:0 0 40px rgba(0,0,0,.6);
 }
 
-.social-icons a{
-  display:block;
-  outline:none;
-  text-decoration:none;
+/* ===== TIMER ===== */
+#timerBox{
+  text-align:center;
+  margin-bottom:16px;
+  padding:12px;
+  border-radius:16px;
+  background:#020617;
+  border:1px solid #334155;
+  font-weight:bold;
+}
+#progressWrap{
+  margin-top:8px;
+  height:8px;
+  background:#020617;
+  border-radius:999px;
+  overflow:hidden;
+  border:1px solid #334155;
+}
+#progressBar{height:100%;width:100%;transition:width .3s linear}
+.progress-safe{background:#22c55e}
+.progress-warn{background:#eab308}
+.progress-danger{background:#ef4444}
+#timerBox.danger{color:#ef4444}
+
+/* ===== QUESTION ===== */
+#questionText{
+  font-family:"Amiri",serif;
+  font-size:1.45rem;
+  margin:22px 0;
+  text-align:center;
+}
+.answer-buttons{display:grid;gap:14px}
+.answer-buttons button{
+  padding:14px;
+  background:#020617;
+  border:1px solid #334155;
+  border-radius:16px;
+  color:#e5e7eb;
+  font-size:1.2rem;
+  cursor:pointer;
+  transition:.25s ease;
+  font-family:"Amiri",serif;
+}
+.answer-buttons button:hover{background:#1e293b}
+.answer-buttons button.correct{
+  border-color:#22c55e;
+  color:#22c55e;
+  box-shadow:0 0 12px rgba(34,197,94,.45);
+}
+.answer-buttons button.wrong{
+  background:#3f0d0d;
+  border-color:#ef4444;
+  color:#ef4444;
 }
 
-.social-icon{
-  width:52px;
-  height:52px;
-  padding:6px;
-  border-radius:14px;
-  background:rgba(255,255,255,.03);
-  opacity:.85;
-  transition:.35s ease;
-  display:block; /* FIX GITHUB PAGES */
+.score-board{
+  margin-top:20px;
+  padding:14px;
+  border-radius:16px;
+  background:#020617;
+  border:1px solid #334155;
+  text-align:center;
 }
 
-.social-icon:hover{
-  transform:scale(1.18) translateY(-4px);
-  opacity:1;
-  filter:brightness(1.15);
-}
-
-.social-icon.ig:hover{
-  box-shadow:0 0 12px rgba(225,48,108,.8),0 0 25px rgba(253,29,29,.6);
-}
-.social-icon.wa:hover{
-  box-shadow:0 0 12px rgba(37,211,102,.8),0 0 25px rgba(37,211,102,.6);
-}
-
-.support-text{
+#result{
   margin-top:18px;
-  font-size:13px;
-  color:#ccc;
+  padding:15px;
+  border-radius:16px;
+  border:1px solid #334155;
+  opacity:0;
+  transform:translateY(10px);
+  transition:.45s ease;
 }
-.support-text a{
-  color:#fff;
-  font-weight:600;
-  text-decoration:none;
-}
-
-.copyright{
+#result.show{opacity:1;transform:translateY(0)}
+.correct-text{color:#22c55e;font-weight:bold}
+.wrong-text{color:#ef4444;font-weight:bold}
+.explain{
   margin-top:10px;
-  font-size:11px;
-  letter-spacing:.6px;
-  color:rgba(255,255,255,.35);
+  font-family:"Amiri",serif;
+  background:#020617;
+  padding:12px;
+  border-radius:12px;
+  border-left:4px solid #38bdf8;
+  line-height:1.7;
 }
-  </style>
+
+#nextBtn{
+  margin-top:22px;
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:16px;
+  background:#2563eb;
+  color:white;
+  cursor:pointer;
+  opacity:0;
+  transform:translateY(8px);
+  transition:.3s ease;
+}
+#nextBtn:not(.hidden){opacity:1;transform:translateY(0)}
+.hidden{display:none}
+
+/* ===== ANIMASI ===== */
+.fade-enter{opacity:0;transform:translateY(12px)}
+.fade-enter-active{opacity:1;transform:translateY(0);transition:.4s ease}
+.timer-warning{animation:pulseRed 1s infinite,shake .3s infinite}
+@keyframes pulseRed{0%{background:#020617}50%{background:#3f0d0d}100%{background:#020617}}
+@keyframes shake{0%{transform:0}25%{transform:translateX(-2px)}50%{transform:translateX(2px)}75%{transform:translateX(-2px)}100%{transform:0}}
+
+#startScreen{text-align:center}
+#startBtn{
+  padding:14px 26px;
+  font-size:1.1rem;
+  border:none;
+  border-radius:16px;
+  background:#22c55e;
+  color:#020617;
+  cursor:pointer;
+}
+#startBtn:hover{background:#16a34a}
+.fade-scale{
+  opacity:0;
+  transform:scale(.96) translateY(10px);
+  transition:.45s ease;
+}
+.fade-scale.show{
+  opacity:1;
+  transform:scale(1) translateY(0);
+}
+.question-fade{
+  opacity:0;
+  transform:translateY(12px);
+}
+.question-fade.show{
+  opacity:1;
+  transform:translateY(0);
+  transition:.35s ease;
+}
+.timer-danger{
+  animation:pulseRed .6s infinite, shake .15s infinite;
+}
+/* ===== REVIEW TRANSITION ===== */
+#reviewBox{
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity .45s ease, transform .45s ease;
+}
+
+#reviewBox.show{
+  opacity:1;
+  transform:translateY(0);
+}
+.review-item{
+  animation:fadeUp .4s ease forwards;
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:none}
+}
+/* ===== REVIEW OVERLAY TRANSITION ===== */
+#reviewOverlay{
+  opacity:0;
+  transform:translateY(20px) scale(.98);
+  transition:opacity .45s ease, transform .45s ease;
+}
+
+#reviewOverlay.show{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+/* ===== COUNTDOWN OVERLAY ===== */
+#countdownOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(2,6,23,.98);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  opacity:0;
+  transition:opacity .4s ease;
+}
+
+#countdownOverlay.show{
+  opacity:1;
+}
+
+#countdownNum{
+  font-size:6rem;
+  font-weight:bold;
+  color:#22c55e;
+  transform:scale(.7);
+  opacity:0;
+  animation:countPop 1s ease forwards;
+}
+
+@keyframes countPop{
+  0%{opacity:0;transform:scale(.6)}
+  40%{opacity:1;transform:scale(1.1)}
+  100%{opacity:1;transform:scale(1)}
+}
+/* ===== GLOBAL SUMMARY ===== */
+#finalBox{
+  margin-top:24px;
+  padding:22px;
+  background:#020617;
+  border:1px solid #334155;
+  border-radius:20px;
+  text-align:center;
+
+  opacity:0;
+  transform:translateY(20px) scale(.98);
+  transition:opacity .5s ease, transform .5s ease;
+}
+
+#finalBox.show{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+
+.final-message{
+  margin-top:16px;
+  padding:14px;
+  border-left:4px solid #38bdf8;
+  background:#020617;
+  border-radius:12px;
+  font-style:italic;
+  line-height:1.6;
+}
+.final-actions{
+  margin-top:20px;
+  display:grid;
+  gap:12px;
+}
+
+.final-actions button{
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  font-size:1rem;
+  transition:.25s ease;
+}
+
+#retryBtn{
+  background:#22c55e;
+  color:#020617;
+}
+#retryBtn:hover{background:#16a34a}
+
+#explainBtn{
+  background:#2563eb;
+  color:white;
+}
+#explainBtn:hover{background:#1d4ed8}
+
+#shareBtn{
+  background:#eab308;
+  color:#020617;
+}
+#shareBtn:hover{background:#ca8a04}
+.review-item{
+  opacity:0;
+  transform:translateY(25px);
+  transition:opacity .5s ease, transform .5s ease;
+}
+
+.review-item.show{
+  opacity:1;
+  transform:translateY(0);
+}
+</style>
 </head>
+
 <body>
+<div class="quiz-box">
 
-<div class="link-container">
-  <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766832638/aasa_ljciat.png" alt="Profil" class="profile-image">
-  <p class="profile-caption">ASAH FAHAM ILMU NAHWU</p>
-  <p class="profile-caption">Kuis ini hanyalah kuis sederhana, setidaknya bisa membantu anda untuk kembali ke dimensi renung pribadi dan kembali mengais memori yang pernah hinggap di sanubari.</p>
-  <p class="profile-caption">Ikuti kuis ini dan tingkatkan pemahamanmu tentang ilmu Nahwu dan ilmu-ilmu lainnya. Setiap soal dilengkapi dengan tambahan wawasan yang menarik!</p>
-  <a href="https://afhimna.github.io/Halaman1/" class="link-button">HALAMAN-1</a>
-  <a href="https://afhimna.github.io/halaman2/" class="link-button">HALAMAN-2</a>
-  <a href="https://afhimna.github.io/halaman3/" class="link-button">HALAMAN-3</a>
-  <a href="https://afhimna.github.io/halaman4/" class="link-button">HALAMAN-4</a>
-  <a href="https://afhimna.github.io/h5s01" class="link-button">HALAMAN-5</a>
-  <a href="https://afhimna.github.io/h6s01" class="link-button">HALAMAN-6</a>
-  <a href="https://afhimna.github.io/h7s01" class="link-button">HALAMAN-7</a>
-  <a href="https://afhimna.github.io/h8s01" class="link-button">HALAMAN-8</a>
-  <a href="https://afhimna.github.io/h9s01" class="link-button">HALAMAN-9</a>
-  <a href="https://a" class="link-button">PROSES</a>
-  <a href="https://a" class="link-button">PROSES</a>
-<div>
-
-<div class="social-container">
-    <p>Temukan lebih banyak kuis yang bermanfaat untuk meningkatkan wawasan ilmiah Anda, info lebih lanjut hubungi:</p>
-    <div class="social-icons">
-        <a href="https://www.instagram.com/umarhamdan_a/" target="_blank">
-            <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766738130/ig_nhlx8u.png" class="social-icon ig">
-        </a>
-        <a href="https://wa.me/62859106771139" target="_blank">
-            <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766738128/wa_qpuube.png" class="social-icon wa">
-        </a>
-    </div>
-    <div class="support-text">
-        Berkenan mendukung kami? Silakan klik
-        <a href="https://afhimna.github.io/share" target="_blank">di sini</a>.
-    </div>
-    <div class="copyright">
-        © 2025 Afhimna Dev. All Rights Reserved.
-    </div>
+<div id="timerBox" class="hidden">
+  ⏳ Waktu: <span id="timeNum">20</span> detik
+  <div id="progressWrap"><div id="progressBar"></div></div>
 </div>
 
+<div id="startScreen">
+  <h2>Sudah siap?</h2>
+  <button id="startBtn" disabled>Mulai</button>
+</div>
 
+<div id="quiz" class="hidden">
+  <div id="questionText"></div>
+  <div id="answers" class="answer-buttons"></div>
+
+<div id="reviewBox" class="hidden"></div>
+
+  <div class="score-board">
+    Skor: <b id="scoreNum">0</b> / 100<br>
+    Benar: <span id="cNum">0</span> | Salah: <span id="wNum">0</span>
+  </div>
+
+  <div id="result" class="hidden"></div>
+  <button id="nextBtn" class="hidden">Soal Selanjutnya</button>
+</div>
+<div id="finalBox" class="hidden">
+  <h3>📊 Ringkasan Akhir</h3>
+
+  <div class="final-content">
+  Skor: <b id="finalScore">0</b> / 100<br>
+  Benar: <span id="finalCorrect">0</span><br>
+  Salah: <span id="finalWrong">0</span><br>
+  Persentase: <span id="finalPercent">0</span>%<br>
+  Waktu Penyelesaian: <span id="finalTime">0:00</span>
+</div>
+
+  <div id="finalMessage" class="final-message"></div>
+  <div class="final-actions">
+  <button id="retryBtn">🔁 Ulangi Kuis</button>
+  <button id="explainBtn">📘 Penjelasan Tambahan</button>
+  <button id="shareBtn">📤 Bagikan</button>
+</div>
+</div>
+
+</div>
+
+<audio id="tickSound" src="tick.mp3" preload="auto"></audio>
+<audio id="alarmSound" src="alarm.mp3" preload="auto"></audio>
+
+<script>
+const POINT=5,TIME_LIMIT=20000;
+let data=[],idx=0,score=0,correct=0,wrongCount=0;
+let currentOptions=[],timer=null,timerActive=false;
+
+/* ⏱ GLOBAL QUIZ TIMER */
+let quizStartTime = null;
+let quizEndTime = null;
+let quizDuration = 0; // dalam detik
+
+/* ✅ REVIEW MODE */
+let reviewLog=[];
+
+let countdownInterval=null,remaining=TIME_LIMIT/1000;
+
+const timeNum=document.getElementById("timeNum"),
+progressBar=document.getElementById("progressBar"),
+tickSound=document.getElementById("tickSound"),
+alarmSound=document.getElementById("alarmSound"),
+scoreNum=document.getElementById("scoreNum"),
+cNum=document.getElementById("cNum"),
+wNum=document.getElementById("wNum"),
+questionText=document.getElementById("questionText"),
+answers=document.getElementById("answers"),
+result=document.getElementById("result"),
+nextBtn=document.getElementById("nextBtn"),
+quiz=document.getElementById("quiz"),
+quizBox=document.querySelector(".quiz-box"),
+startScreen=document.getElementById("startScreen"),
+startBtn=document.getElementById("startBtn"),
+timerBox=document.getElementById("timerBox");
+
+fetch("soal.json").then(r=>r.json()).then(d=>{
+  data=d;startBtn.disabled=false;
+});
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+}
+
+function startTimer(){
+  // 🔄 reset kondisi visual timer (soal baru = normal)
+  quizBox.classList.remove("timer-warning");
+  alarmSound.pause();
+  alarmSound.currentTime = 0;
+
+  clearTimeout(timer);
+  clearInterval(countdownInterval);
+
+  timerActive = true;
+  remaining = TIME_LIMIT / 1000;
+  timeNum.textContent = remaining;
+  progressBar.style.width = "100%";
+
+  countdownInterval = setInterval(()=>{
+    if(!timerActive) return;
+
+    remaining--;
+    timeNum.textContent = remaining;
+    progressBar.style.width = (remaining / (TIME_LIMIT/1000)) * 100 + "%";
+    progressBar.className = "";
+    progressBar.classList.add(
+      remaining > 10 ? "progress-safe" :
+      remaining > 5  ? "progress-warn" :
+                       "progress-danger"
+    );
+
+    if(remaining <= 3){
+  quizBox.classList.remove("timer-warning");
+  quizBox.classList.add("timer-danger");
+  alarmSound.play();
+}
+else if(remaining <= 5){
+  quizBox.classList.add("timer-warning");
+}
+
+    if(remaining <= 0){
+      clearInterval(countdownInterval);
+    }
+  }, 1000);
+
+  timer = setTimeout(()=>{
+    if(timerActive) timeUp();
+  }, TIME_LIMIT);
+}
+
+function pauseTimer(){
+  timerActive=false;
+  clearTimeout(timer);clearInterval(countdownInterval);
+}
+
+function show(){
+  questionText.classList.remove("show");
+  answers.classList.remove("show");
+  questionText.classList.add("question-fade");
+  answers.classList.add("question-fade");
+
+  setTimeout(()=>{
+    const q=data[idx];
+
+    questionText.textContent=`Soal ${idx+1}: ${q.question}`;
+    answers.innerHTML="";
+    startTimer();
+
+    currentOptions=["A","B","C","D","E"].map((l,i)=>({
+      text:q["option_"+l],
+      isCorrect:i===Number(q.answer_index)
+    }));
+    shuffle(currentOptions);
+
+    currentOptions.forEach(opt=>{
+      const b=document.createElement("button");
+      b.textContent=opt.text;
+      b.onclick=()=>check(b,opt);
+      answers.appendChild(b);
+    });
+
+    requestAnimationFrame(()=>{
+      questionText.classList.add("show");
+      answers.classList.add("show");
+    });
+
+    result.classList.add("hidden");
+    nextBtn.classList.add("hidden");
+  },200);
+}
+
+function check(btn,opt){
+  if(!timerActive)return;
+  pauseTimer();
+
+  /* ✅ REVIEW MODE LOG (JAWABAN) */
+  reviewLog.push({
+    soal: data[idx].question,
+    jawabanBenar: data[idx]["option_" + ["A","B","C","D","E"][Number(data[idx].answer_index)]],
+    jawabanUser: opt.text,
+    status: opt.isCorrect ? "benar" : "salah",
+    penjelasan: data[idx].explanation
+  });
+
+  [...answers.children].forEach((b,i)=>{
+    if(currentOptions[i].isCorrect)b.classList.add("correct");
+    if(b===btn&&!opt.isCorrect)b.classList.add("wrong");
+    b.disabled=true;
+  });
+
+  result.classList.remove("hidden");
+  result.classList.add("show");
+  setTimeout(focusResult, 200);
+
+  if(opt.isCorrect){
+    correct++;score+=POINT;
+    result.innerHTML=`<div class="correct-text">✔ Jawaban Benar</div><div class="explain">${data[idx].explanation}</div>`;
+  }else{
+    wrongCount++;
+    result.innerHTML=`<div class="wrong-text">✖ Jawaban Salah</div><div class="explain">${data[idx].explanation}</div>`;
+  }
+
+  scoreNum.textContent=score;
+  cNum.textContent=correct;
+  wNum.textContent=wrongCount;
+  nextBtn.classList.remove("hidden");
+}
+
+function timeUp(){
+  pauseTimer();
+
+  // 🛑 HENTIKAN SEMUA EFEK TIMER
+  quizBox.classList.remove("timer-warning","timer-danger");
+  alarmSound.pause();
+  alarmSound.currentTime = 0;
+
+  /* ✅ REVIEW MODE LOG (TIMEOUT) */
+  reviewLog.push({
+    soal: data[idx].question,
+    jawabanBenar: data[idx]["option_" + ["A","B","C","D","E"][Number(data[idx].answer_index)]],
+    jawabanUser: "(tidak dijawab)",
+    status: "timeout",
+    penjelasan: data[idx].explanation
+  });
+
+  wrongCount++;
+  result.classList.remove("hidden");
+  result.classList.add("show");
+  setTimeout(focusResult, 200);
+
+  result.innerHTML = `
+    <div class="wrong-text">⏰ Waktu habis</div>
+    <div class="explain">${data[idx].explanation}</div>
+  `;
+
+  wNum.textContent = wrongCount;
+  nextBtn.classList.remove("hidden");
+}
+
+nextBtn.onclick = ()=>{
+  idx++;
+
+  if(idx < data.length){
+    // 🔁 masih ada soal → lanjut kuis
+    show();
+  }else{
+    // 🛑 soal habis → tutup kuis & timer
+    quiz.classList.add("hidden");      // (opsional UX, tapi disarankan)
+    nextBtn.classList.add("hidden");
+    timerBox.classList.add("hidden");
+
+    // ✨ tampilkan review
+    showReview();
+  }
+};
+
+startBtn.onclick=()=>{
+  startScreen.classList.add("hidden");
+
+  startCountdown(()=>{
+
+  // ⏱ MULAI GLOBAL TIMER DI SINI
+  quizStartTime = Date.now();
+
+  quiz.classList.remove("hidden");
+  quiz.classList.add("fade-scale");
+  requestAnimationFrame(()=>quiz.classList.add("show"));
+  timerBox.classList.remove("hidden");
+  show();
+});
+};
+
+window.addEventListener("load",()=>document.body.classList.add("page-ready"));
+
+function focusResult(){
+  result.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function showReview(){
+  const overlay=document.createElement("div");
+  overlay.id="reviewOverlay";
+  overlay.style.cssText=`
+    position:fixed;
+    inset:0;
+    background:rgba(2,6,23,.98);
+    overflow-y:auto;
+    z-index:9999;
+    padding:24px;
+    color:#e5e7eb;
+  `;
+
+  let html=`
+    <div style="max-width:720px;margin:auto">
+      <h2 style="text-align:center;margin-bottom:20px">
+        📋 Review Jawaban
+      </h2>
+  `;
+
+  reviewLog.forEach((r,i)=>{
+    const color=
+      r.status==="benar" ? "#22c55e" :
+      r.status==="timeout" ? "#eab308" :
+      "#ef4444";
+
+    html+=`
+      <div class="review-item" style="
+      background:#020617;
+      border:1px solid #334155;
+      border-left:6px solid ${color};
+      border-radius:16px;
+      padding:16px;
+      margin-bottom:16px;
+">
+        <div style="font-weight:bold;margin-bottom:8px">
+          ${i+1}. ${r.soal}
+        </div>
+        <div>Jawaban kamu: <b>${r.jawabanUser}</b></div>
+        <div>Jawaban benar: <b>${r.jawabanBenar}</b></div>
+        <div style="margin:6px 0;color:${color}">
+          Status: ${r.status.toUpperCase()}
+        </div>
+        <div style="
+          margin-top:10px;
+          padding:12px;
+          background:#020617;
+          border-left:4px solid #38bdf8;
+          border-radius:10px
+        ">
+          ${r.penjelasan}
+        </div>
+      </div>
+    `;
+  });
+
+  html+=`
+      <button id="closeReview"
+        style="
+          width:100%;
+          padding:14px;
+          border:none;
+          border-radius:16px;
+          background:#2563eb;
+          color:white;
+          font-size:1rem;
+          cursor:pointer;
+        ">
+        Tutup Review
+      </button>
+    </div>
+  `;
+
+  overlay.innerHTML=html;
+  document.body.appendChild(overlay);
+  // 🔥 Scroll Reveal Effect
+const items = overlay.querySelectorAll(".review-item");
+
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("show");
+      observer.unobserve(entry.target);
+    }
+  });
+},{
+  threshold:0.2
+});
+
+items.forEach(item=>{
+  observer.observe(item);
+});
+
+  /* ✨ AKTIFKAN TRANSISI */
+  requestAnimationFrame(()=>{
+    overlay.classList.add("show");
+  });
+  
+  document.getElementById("closeReview").onclick=()=>{
+
+  overlay.classList.remove("show");
+
+  setTimeout(()=>{
+
+    overlay.remove();
+
+    // ⏱ AKHIRI GLOBAL TIMER
+    quizEndTime = Date.now();
+
+    // hitung durasi dalam detik
+    quizDuration = Math.floor((quizEndTime - quizStartTime) / 1000);
+
+    showGlobalSummary();
+
+  },450);
+};
+
+  overlay.scrollTo({top:0,behavior:"smooth"});
+}
+function startCountdown(onFinish){
+  const overlay=document.createElement("div");
+  overlay.id="countdownOverlay";
+
+  const num=document.createElement("div");
+  num.id="countdownNum";
+
+  overlay.appendChild(num);
+  document.body.appendChild(overlay);
+
+  let count=3;
+
+  requestAnimationFrame(()=>overlay.classList.add("show"));
+
+  const run=()=>{
+    num.textContent = count > 0 ? count : "Mulai";
+    num.style.animation="none";
+    num.offsetHeight; // reset animation
+    num.style.animation="countPop 1s ease forwards";
+
+    if(count < 0){
+      overlay.classList.remove("show");
+      setTimeout(()=>{
+        overlay.remove();
+        onFinish();
+      },400);
+      return;
+    }
+
+    count--;
+    setTimeout(run,1000);
+  };
+
+  run();
+}
+function getFinalMessage(percent){
+  if(percent === 100){
+    return "MasyaAllah, semua jawaban benar. Penguasaan materi sangat ممتاز.";
+  }
+  if(percent >= 75){
+    return "Hasil sangat baik. Tinggal sedikit penguatan untuk mencapai kesempurnaan.";
+  }
+  if(percent >= 50){
+    return "Cukup baik. Perlu pengulangan agar pemahaman semakin kokoh.";
+  }
+  if(percent >= 25){
+    return "Masih perlu latihan. Jangan menyerah, perbaiki dan ulangi kembali.";
+  }
+  return "Jangan berkecil hati. Setiap kesalahan adalah jalan menuju ilmu.";
+}
+function showGlobalSummary(){
+
+  const total = correct + wrongCount;
+  const percent = total === 0 ? 0 : Math.round((correct / total) * 100);
+
+  document.getElementById("finalScore").textContent = score;
+  document.getElementById("finalCorrect").textContent = correct;
+  document.getElementById("finalWrong").textContent = wrongCount;
+  document.getElementById("finalPercent").textContent = percent;
+  // ⏱ FORMAT WAKTU MENIT:DETIK
+const minutes = Math.floor(quizDuration / 60);
+const seconds = quizDuration % 60;
+
+const formattedTime = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+
+document.getElementById("finalTime").textContent = formattedTime;
+
+  document.getElementById("finalMessage").textContent =
+    getFinalMessage(percent);
+
+  const box = document.getElementById("finalBox");
+  box.classList.remove("hidden");
+
+  requestAnimationFrame(()=>{
+    box.classList.add("show");
+  });
+
+  box.scrollIntoView({behavior:"smooth",block:"center"});
+}
+document.addEventListener("click",function(e){
+
+  if(e.target.id === "retryBtn"){
+    location.reload();
+  }
+
+});
+if(e.target.id === "explainBtn"){
+  alert("Halaman penjelasan tambahan akan segera tersedia.");
+}
+if(e.target.id === "shareBtn"){
+  const percent = document.getElementById("finalPercent").textContent;
+  const text = `Saya mendapat skor ${percent}% di Kuis Nahwu!`;
+
+  if(navigator.share){
+    navigator.share({
+      title: "Kuis Nahwu",
+      text: text,
+      url: window.location.href
+    });
+  }else{
+    alert("Fitur share tidak didukung di perangkat ini.");
+  }
+}
+</script>
 </body>
 </html>
-
