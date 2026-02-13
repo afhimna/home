@@ -65,7 +65,7 @@
       .link-button {
         padding: 12px 20px;
         font-size: 14px;
-        min-width: 120px; /
+        min-width: 120px; 
       }
 
       .profile-image {
@@ -148,11 +148,45 @@
   letter-spacing:.6px;
   color:rgba(255,255,255,.35);
 }
+/* ===== VISITOR COUNTER ===== */
+#visitorBox{
+  margin-bottom:22px;
+  padding:12px 18px;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:10px;
+  font-size:15px;
+  background:rgba(255,255,255,.04);
+  backdrop-filter: blur(4px);
+  letter-spacing:.5px;
+  opacity:0;
+  transform:translateY(10px);
+  transition:all .6s ease;
+}
+
+#visitorBox.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+#visitorCount{
+  font-weight:bold;
+  font-size:18px;
+  transition:.3s ease;
+}
+
+#visitorBox:hover{
+  border-color:#fff;
+  box-shadow:0 0 12px rgba(255,255,255,.15);
+}
   </style>
 </head>
 <body>
 
 <div class="link-container">
+<!-- ===== VISITOR COUNTER ===== -->
+<div id="visitorBox">
+  👥 Total Pengunjung: <b id="visitorCount">0</b>
+</div>
   <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766832638/aasa_ljciat.png" alt="Profil" class="profile-image">
   <p class="profile-caption">ASAH FAHAM ILMU NAHWU</p>
   <p class="profile-caption">Kuis ini hanyalah kuis sederhana, setidaknya bisa membantu anda untuk kembali ke dimensi renung pribadi dan kembali mengais memori yang pernah hinggap di sanubari.</p>
@@ -168,7 +202,7 @@
   <a href="https://afhimna.github.io/h9s01" class="link-button">HALAMAN-9</a>
   <a href="https://a" class="link-button">PROSES</a>
   <a href="https://a" class="link-button">PROSES</a>
-<div>
+</div>
 
 <div class="social-container">
     <p>Temukan lebih banyak kuis yang bermanfaat untuk meningkatkan wawasan ilmiah Anda, info lebih lanjut hubungi:</p>
@@ -189,6 +223,37 @@
     </div>
 </div>
 
+<script>
+// ===== VISITOR COUNTER WITH ANIMATION =====
+const counterEl = document.getElementById("visitorCount");
+const boxEl = document.getElementById("visitorBox");
 
+function animateCounter(target){
+  let start = 0;
+  const duration = 1500;
+  const increment = target / (duration / 16);
+
+  const timer = setInterval(() => {
+    start += increment;
+    if(start >= target){
+      counterEl.textContent = target.toLocaleString();
+      clearInterval(timer);
+    }else{
+      counterEl.textContent = Math.floor(start).toLocaleString();
+    }
+  },16);
+}
+
+fetch("https://api.countapi.xyz/hit/afhimna-arsyad-mainpage/visits")
+  .then(res => res.json())
+  .then(data => {
+    animateCounter(data.value);
+    setTimeout(()=> boxEl.classList.add("show"),200);
+  })
+  .catch(() => {
+    counterEl.textContent = "0";
+    boxEl.classList.add("show");
+  });
+</script>
 </body>
 </html>
