@@ -4,177 +4,222 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AFHIMNA</title>
+
+  <!-- Elegant Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Source+Sans+3:wght@300;400;500&display=swap" rel="stylesheet">
+
   <style>
     body {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 100vh;
       margin: 0;
-      background-color: #000;
+      padding-top: 40px;
+      background: radial-gradient(circle at top, #111 0%, #000 60%);
       color: #fff;
-      font-family: Arial, sans-serif;
+      font-family: 'Source Sans 3', sans-serif;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.2s ease, transform 1.2s ease;
     }
-
+    body.loaded {
+      opacity: 1;
+      transform: translateY(0);
+    }
     .link-container {
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
+      max-width: 700px;
+      padding: 0 20px;
     }
-
-    .link-button {
-      display: inline-block;
-      margin: 10px;
-      padding: 15px 30px;
-      text-decoration: none;
-      color: #fff;
-      border: 2px solid #fff;
-      border-radius: 5px;
-      font-size: 18px;
-      transition: background-color 0.3s, color 0.3s, transform 0.3s;
-      min-width: 150px; /* Menambahkan lebar minimum pada tombol */
-    }
-
-    .link-button:hover {
-      background-color: #fff;
-      color: #000;
-      transform: scale(1.05);
-    }
-
     .profile-image {
       display: block;
       margin: 20px auto;
       border-radius: 50%;
       width: 200px;
       height: 200px;
-      transition: opacity 0.3s;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 1s ease, transform 1s ease;
     }
-
-    .profile-image:hover {
-      opacity: 0.8;
+    .profile-image.show {
+      opacity: 1;
+      transform: scale(1);
     }
-
     .profile-caption {
-      margin-top: 10px;
+      margin-top: 14px;
       font-size: 16px;
+      line-height: 1.7;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: 0.9s ease;
+    }
+    .profile-caption.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .profile-caption:first-of-type {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      letter-spacing: 1px;
+    }
+    .link-button {
+      position: relative;
+      display: inline-block;
+      margin: 14px 0;
+      padding: 16px 36px;
+      text-decoration: none;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 40px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      letter-spacing: 1px;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.9s cubic-bezier(.19,1,.22,1);
+      backdrop-filter: blur(4px);
     }
 
-    @media screen and (max-width: 600px) {
-      .link-button {
-        padding: 12px 20px;
-        font-size: 14px;
-        min-width: 120px; 
-      }
-
-      .profile-image {
-        width: 150px;
-        height: 150px;
-      }
-
-      .profile-caption {
-        font-size: 14px;
-      }
+    .link-button.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .link-button::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,0.25),
+        transparent
+      );
+      transition: 0.8s;
     }
 
-    .additional-info {
-      margin-top: 20px;
-      font-size: 16px;
+    .link-button:hover::before {
+      left: 100%;
     }
-.social-container{
-  margin-top:26px;
-  text-align:center;
+
+    .link-button:hover {
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 0 20px rgba(255,255,255,0.15);
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,0.8);
+    }
+    .social-container {
+      margin-top: 40px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: 0.9s ease;
+    }
+    .social-container.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .social-container p {
+      font-size: 13px;
+      color: #bbb;
+      margin-bottom: 14px;
+    }
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+    }
+    .social-icon {
+      width: 52px;
+      height: 52px;
+      padding: 6px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+      transition: .4s ease;
+    }
+    .social-icon:hover {
+      transform: scale(1.15) translateY(-4px);
+      box-shadow: 0 0 18px rgba(255,255,255,0.2);
+    }
+
+    .support-text {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #ccc;
+    }
+
+    .support-text a {
+      color: #fff;
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .copyright {
+      margin-top: 14px;
+      font-size: 11px;
+      letter-spacing: .6px;
+      color: rgba(255,255,255,.35);
+    }
+
+    @media(max-width:600px){
+      .link-button{
+        padding:14px 28px;
+        font-size:16px;
+      }
+      .profile-image{
+        width:150px;
+        height:150px;
+      }
+    }
+	.visitor-wrapper{
+	margin-top: 40px;
+	display: flex;
+	justify-content: center;
+	}
+
+.visitor-card{
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 28px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 25px rgba(255,215,0,0.08);
+  transition: .4s ease;
 }
 
-.social-container p{
-  font-size:13px;
-  color:#bbb;
-  margin-bottom:14px;
+.visitor-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 0 35px rgba(255,215,0,0.2);
 }
 
-.social-icons{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:24px;
+.visitor-icon{
+  font-size: 28px;
 }
 
-.social-icons a{
-  display:block;
-  outline:none;
-  text-decoration:none;
+.visitor-label{
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #bbb;
 }
 
-.social-icon{
-  width:52px;
-  height:52px;
-  padding:6px;
-  border-radius:14px;
-  background:rgba(255,255,255,.03);
-  opacity:.85;
-  transition:.35s ease;
-  display:block; /* FIX GITHUB PAGES */
-}
-
-.social-icon:hover{
-  transform:scale(1.18) translateY(-4px);
-  opacity:1;
-  filter:brightness(1.15);
-}
-
-.social-icon.ig:hover{
-  box-shadow:0 0 12px rgba(225,48,108,.8),0 0 25px rgba(253,29,29,.6);
-}
-.social-icon.wa:hover{
-  box-shadow:0 0 12px rgba(37,211,102,.8),0 0 25px rgba(37,211,102,.6);
-}
-
-.support-text{
-  margin-top:18px;
-  font-size:13px;
-  color:#ccc;
-}
-.support-text a{
-  color:#fff;
-  font-weight:600;
-  text-decoration:none;
-}
-
-.copyright{
-  margin-top:10px;
-  font-size:11px;
-  letter-spacing:.6px;
-  color:rgba(255,255,255,.35);
-}
-#visitorBox{
-  margin-bottom:22px;
-  padding:12px 18px;
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:10px;
-  font-size:15px;
-  background:rgba(255,255,255,.04);
-  backdrop-filter: blur(4px);
-  letter-spacing:.5px;
-  opacity:0;
-  transform:translateY(10px);
-  transition:all .6s ease;
-}
-
-#visitorBox.show{
-  opacity:1;
-  transform:translateY(0);
-}
-
-#visitorCount{
-  font-weight:bold;
-  font-size:18px;
-  transition:.3s ease;
-}
-
-#visitorBox:hover{
-  border-color:#fff;
-  box-shadow:0 0 12px rgba(255,255,255,.15);
+.visitor-number{
+  font-size: 36px;
+  font-weight: 600;
+  font-family: 'Cormorant Garamond', serif;
+  color: gold;
+  letter-spacing: 1px;
 }
   </style>
 </head>
@@ -184,73 +229,126 @@
   <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766832638/aasa_ljciat.png" alt="Profil" class="profile-image">
   <p class="profile-caption">ASAH FAHAM ILMU NAHWU</p>
   <p class="profile-caption">Kuis ini hanyalah kuis sederhana, setidaknya bisa membantu anda untuk kembali ke dimensi renung pribadi dan kembali mengais memori yang pernah hinggap di sanubari.</p>
-  <p class="profile-caption">Ikuti kuis ini dan tingkatkan pemahamanmu tentang ilmu Nahwu dan ilmu-ilmu lainnya. Setiap soal dilengkapi dengan tambahan wawasan yang menarik!</p>
-  <a href="https://afhimna.github.io/Halaman1/" class="link-button">HALAMAN-1</a>
-  <a href="https://afhimna.github.io/halaman2/" class="link-button">HALAMAN-2</a>
-  <a href="https://afhimna.github.io/halaman3/" class="link-button">HALAMAN-3</a>
-  <a href="https://afhimna.github.io/halaman4/" class="link-button">HALAMAN-4</a>
-  <a href="https://afhimna.github.io/h5s01" class="link-button">HALAMAN-5</a>
-  <a href="https://afhimna.github.io/h6s01" class="link-button">HALAMAN-6</a>
-  <a href="https://afhimna.github.io/h7s01" class="link-button">HALAMAN-7</a>
-  <a href="https://afhimna.github.io/h8s01" class="link-button">HALAMAN-8</a>
-  <a href="https://afhimna.github.io/h9s01" class="link-button">HALAMAN-9</a>
-  <a href="https://a" class="link-button">PROSES</a>
-  <a href="https://a" class="link-button">PROSES</a>
+  <p class="profile-caption">Ikuti kuis ini dan tingkatkan pemahamanmu tentang ilmu Nahwu dan ilmu-ilmu lainnya.</p>
+
+  <a href="https://afhimna.github.io/COOMING SOON1/" class="link-button">FASHL 1</a>
+  <a href="https://afhimna.github.io/COOMING SOON2/" class="link-button">COOMING SOON-2</a>
+  <a href="https://afhimna.github.io/COOMING SOON3/" class="link-button">COOMING SOON-3</a>
+  <a href="https://afhimna.github.io/COOMING SOON4/" class="link-button">COOMING SOON-4</a>
+  <a href="https://afhimna.github.io/h5s01" class="link-button">COOMING SOON-5</a>
+  <a href="https://afhimna.github.io/h6s01" class="link-button">COOMING SOON-6</a>
+  <a href="https://afhimna.github.io/h7s01" class="link-button">COOMING SOON-7</a>
+  <a href="https://afhimna.github.io/h8s01" class="link-button">COOMING SOON-8</a>
+  <a href="https://afhimna.github.io/h9s01" class="link-button">COOMING SOON-9</a>
 </div>
 
-<!-- ===== VISITOR COUNTER ===== -->
-<div id="visitorBox">
-  👥 Total Pengunjung: <b id="visitorCount">0</b>
+<div class="visitor-wrapper">
+  <div class="visitor-card">
+    <div class="visitor-icon">🪶</div>
+    <div class="visitor-info">
+      <div class="visitor-label">Total Pengunjung</div>
+      <div class="visitor-number" id="visitorCount">0</div>
+    </div>
+  </div>
 </div>
 
 <div class="social-container">
-    <p>Temukan lebih banyak kuis yang bermanfaat untuk meningkatkan wawasan ilmiah Anda, info lebih lanjut hubungi:</p>
-    <div class="social-icons">
-        <a href="https://www.instagram.com/umarhamdan_a/" target="_blank">
-            <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766738130/ig_nhlx8u.png" class="social-icon ig">
-        </a>
-    </div>
-    <div class="support-text">
-        Berkenan mendukung kami? Silakan klik
-        <a href="https://afhimna.github.io/share" target="_blank">di sini</a>.
-    </div>
-    <div class="copyright">
-        © 2025 Afhimna Dev. All Rights Reserved.
-    </div>
+  <p>Temukan lebih banyak kuis ilmiah, info lebih lanjut hubungi:</p>
+  <div class="social-icons">
+      <a href="https://www.instagram.com/umarhamdan_a/" target="_blank">
+          <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766738130/ig_nhlx8u.png" class="social-icon">
+      </a>
+  </div>
+  <div class="support-text">
+      Berkenan mendukung kami? <a href="https://afhimna.github.io/share" target="_blank">Klik di sini</a>.
+  </div>
+  <div class="copyright">
+      © 2025 Afhimna Dev. All Rights Reserved.
+  </div>
 </div>
 
 <script>
-const counterEl = document.getElementById("visitorCount");
-const boxEl = document.getElementById("visitorBox");
+document.addEventListener("DOMContentLoaded", function(){
 
-function animateCounter(target){
-  let start = 0;
-  const duration = 1500;
-  const increment = target / (duration / 16);
+  document.body.classList.add("loaded");
 
-  const timer = setInterval(() => {
-    start += increment;
-    if(start >= target){
-      counterEl.textContent = target.toLocaleString();
-      clearInterval(timer);
-    }else{
-      counterEl.textContent = Math.floor(start).toLocaleString();
-    }
-  },16);
-}
-
-fetch("https://api.countapi.xyz/hit/afhimna-arsyad-mainpage/visits")
-  .then(res => res.json())
-  .then(data => {
-    animateCounter(data.value);
-    setTimeout(()=> boxEl.classList.add("show"),200);
-  })
-  .catch(() => {
-    counterEl.textContent = "0";
-    boxEl.classList.add("show");
+  const intro = document.querySelectorAll(".profile-image, .profile-caption");
+  intro.forEach((el,i)=>{
+    setTimeout(()=> el.classList.add("show"), i*200);
   });
+
+  const buttons = document.querySelectorAll(".link-button");
+  const supportSection = document.querySelector(".social-container");
+
+  let shownCount = 0;
+
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add("show");
+        observer.unobserve(entry.target);
+        shownCount++;
+
+        if(shownCount === buttons.length){
+          setTimeout(()=>{
+            supportSection.classList.add("show");
+          },400);
+        }
+      }
+    });
+  },{threshold:.3});
+
+  buttons.forEach(btn=> observer.observe(btn));
+
+});
 </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA2FrGsXZvf3VdU3qSE6MppM1tHT_hQ6G4",
+    authDomain: "afhimna2025.firebaseapp.com",
+    projectId: "afhimna2025",
+    storageBucket: "afhimna2025.firebasestorage.app",
+    messagingSenderId: "1068917244263",
+    appId: "1:1068917244263:web:9290473360a7f4b17fefc2",
+    measurementId: "G-Q0TCYN528D"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const counterRef = doc(db, "visitor", "counter");
+
+  async function updateVisitorCount() {
+    await updateDoc(counterRef, {
+      count: increment(1)
+    });
+
+    const docSnap = await getDoc(counterRef);
+    animateCounter(docSnap.data().count);
+  }
+
+  updateVisitorCount();
+function animateCounter(finalNumber) {
+  let start = 0;
+  const duration = 1200;
+  const startTime = performance.now();
+
+  function update(currentTime) {
+    const progress = Math.min((currentTime - startTime) / duration, 1);
+    const value = Math.floor(progress * finalNumber);
+
+    document.getElementById("visitorCount").innerText =
+      value.toLocaleString();
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    }
+  }
+
+  requestAnimationFrame(update);
+}</script>
 </body>
 </html>
-
-
