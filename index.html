@@ -82,7 +82,6 @@
       margin-top: 20px;
       font-size: 16px;
     }
-    /* ===== SOWAR / SOCIAL ===== */
 .social-container{
   margin-top:26px;
   text-align:center;
@@ -148,7 +147,6 @@
   letter-spacing:.6px;
   color:rgba(255,255,255,.35);
 }
-/* ===== VISITOR COUNTER ===== */
 #visitorBox{
   margin-bottom:22px;
   padding:12px 18px;
@@ -183,10 +181,6 @@
 <body>
 
 <div class="link-container">
-<!-- ===== VISITOR COUNTER ===== -->
-<div id="visitorBox">
-  👥 Total Pengunjung: <b id="visitorCount">0</b>
-</div>
   <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766832638/aasa_ljciat.png" alt="Profil" class="profile-image">
   <p class="profile-caption">ASAH FAHAM ILMU NAHWU</p>
   <p class="profile-caption">Kuis ini hanyalah kuis sederhana, setidaknya bisa membantu anda untuk kembali ke dimensi renung pribadi dan kembali mengais memori yang pernah hinggap di sanubari.</p>
@@ -202,6 +196,11 @@
   <a href="https://afhimna.github.io/h9s01" class="link-button">HALAMAN-9</a>
   <a href="https://a" class="link-button">PROSES</a>
   <a href="https://a" class="link-button">PROSES</a>
+</div>
+
+<!-- ===== VISITOR COUNTER ===== -->
+<div id="visitorBox">
+  👥 Total Pengunjung: <b id="visitorCount">0</b>
 </div>
 
 <div class="social-container">
@@ -221,7 +220,6 @@
 </div>
 
 <script>
-// ===== VISITOR COUNTER WITH ANIMATION =====
 const counterEl = document.getElementById("visitorCount");
 const boxEl = document.getElementById("visitorBox");
 
@@ -254,6 +252,5 @@ fetch("https://api.countapi.xyz/hit/afhimna-arsyad-mainpage/visits")
 </script>
 </body>
 </html>
-
 
 
