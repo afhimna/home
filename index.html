@@ -1,244 +1,365 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#07070a">
   <title>AFHIMNA</title>
 
-  <!-- Elegant Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Source+Sans+3:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <script>
+    // Terapkan tema sebelum render agar tidak berkedip
+    (function(){
+      var t;
+      try { t = localStorage.getItem("afhimna-theme"); } catch(e){}
+      if(t !== "light" && t !== "dark"){
+        t = window.matchMedia && matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
 
   <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      margin: 0;
-      padding-top: 40px;
-      background: radial-gradient(circle at top, #111 0%, #000 60%);
-      color: #fff;
-      font-family: 'Source Sans 3', sans-serif;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 1.2s ease, transform 1.2s ease;
+    :root{
+      --bg:#07070a;
+      --bg-glow:#1b1608;
+      --text:#f4efe4;
+      --muted:#aaa392;
+      --accent:#e3bb4f;
+      --accent-soft:rgba(227,187,79,.18);
+      --line:rgba(255,255,255,.16);
+      --line-strong:rgba(227,187,79,.85);
+      --glass:rgba(255,255,255,.05);
+      --spot:rgba(227,187,79,.22);
+      --shadow:0 0 30px rgba(227,187,79,.12);
+      --icon-bg:rgba(255,255,255,.05);
+      --blob1:rgba(227,187,79,.16);
+      --blob2:rgba(90,110,255,.12);
     }
-    body.loaded {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .link-container {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 700px;
-      padding: 0 20px;
-    }
-    .profile-image {
-      display: block;
-      margin: 20px auto;
-      border-radius: 50%;
-      width: 200px;
-      height: 200px;
-      opacity: 0;
-      transform: scale(0.9);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-    .profile-image.show {
-      opacity: 1;
-      transform: scale(1);
-    }
-    .profile-caption {
-      margin-top: 14px;
-      font-size: 16px;
-      line-height: 1.7;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: 0.9s ease;
-    }
-    .profile-caption.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .profile-caption:first-of-type {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 24px;
-      letter-spacing: 1px;
-    }
-    .link-button {
-      position: relative;
-      display: inline-block;
-      margin: 14px 0;
-      padding: 16px 36px;
-      text-decoration: none;
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 40px;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      letter-spacing: 1px;
-      overflow: hidden;
-      opacity: 0;
-      transform: translateY(50px);
-      transition: all 0.9s cubic-bezier(.19,1,.22,1);
-      backdrop-filter: blur(4px);
+    :root[data-theme="light"]{
+      --bg:#f2f5fb;
+      --bg-glow:#ffffff;
+      --text:#10213f;
+      --muted:#55627f;
+      --accent:#1c3d7a;
+      --accent-soft:rgba(28,61,122,.12);
+      --line:rgba(16,33,63,.2);
+      --line-strong:rgba(28,61,122,.8);
+      --glass:rgba(255,255,255,.72);
+      --spot:rgba(28,61,122,.14);
+      --shadow:0 10px 30px rgba(28,61,122,.16);
+      --icon-bg:#10213f;
+      --blob1:rgba(28,61,122,.14);
+      --blob2:rgba(214,170,60,.2);
     }
 
-    .link-button.show {
-      opacity: 1;
-      transform: translateY(0);
+    *{ box-sizing:border-box; }
+    html{ scroll-padding-top:env(safe-area-inset-top,0px); }
+    body{
+      margin:0;
+      min-height:100vh;
+      padding:56px 0 40px;
+      padding-top:calc(56px + env(safe-area-inset-top,0px));
+      padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      background:radial-gradient(circle at top, var(--bg-glow) 0%, var(--bg) 62%);
+      background-color:var(--bg);
+      color:var(--text);
+      font-family:'Source Sans 3',sans-serif;
+      overflow-x:hidden;
+      opacity:0;
+      transition:opacity 1.2s ease;
     }
-    .link-button::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        120deg,
-        transparent,
-        rgba(255,255,255,0.25),
-        transparent
-      );
-      transition: 0.8s;
+    body.loaded{ opacity:1; }
+
+    /* ===== Latar bergerak ===== */
+    .bg{ position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; }
+    .blob{
+      position:absolute; width:55vmax; height:55vmax; border-radius:50%;
+      filter:blur(70px); opacity:.9;
+    }
+    .blob.b1{ background:var(--blob1); top:-20vmax; left:-15vmax; animation:drift1 22s ease-in-out infinite alternate; }
+    .blob.b2{ background:var(--blob2); bottom:-25vmax; right:-18vmax; animation:drift2 26s ease-in-out infinite alternate; }
+    @keyframes drift1{ to{ transform:translate(12vmax,10vmax) scale(1.15); } }
+    @keyframes drift2{ to{ transform:translate(-10vmax,-12vmax) scale(1.1); } }
+
+    .letter{
+      position:absolute; bottom:-80px;
+      font-family:'Amiri',serif;
+      color:var(--accent);
+      opacity:0;
+      animation:rise linear infinite;
+    }
+    @keyframes rise{
+      0%{ transform:translateY(0) rotate(0deg); opacity:0; }
+      12%{ opacity:.1; }
+      85%{ opacity:.07; }
+      100%{ transform:translateY(-115vh) rotate(25deg); opacity:0; }
     }
 
-    .link-button:hover::before {
-      left: 100%;
+    /* ===== Tombol tema ===== */
+    .theme-toggle{
+      position:fixed;
+      top:calc(16px + env(safe-area-inset-top,0px));
+      right:16px;
+      z-index:20;
+      width:48px; height:48px;
+      border-radius:50%;
+      border:1px solid var(--line);
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      color:var(--accent);
+      cursor:pointer;
+      display:grid; place-items:center;
+      box-shadow:var(--shadow);
+      transition:transform .4s cubic-bezier(.34,1.56,.64,1), border-color .3s;
+    }
+    .theme-toggle:hover{ transform:scale(1.1) rotate(15deg); border-color:var(--line-strong); }
+    .theme-toggle:active{ transform:scale(.92); }
+    .theme-toggle:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+    .theme-toggle svg{
+      grid-area:1/1; width:22px; height:22px;
+      transition:transform .7s cubic-bezier(.65,0,.2,1), opacity .5s ease;
+    }
+    .theme-toggle .sun{ opacity:0; transform:rotate(-90deg) scale(.3); }
+    .theme-toggle .moon{ opacity:1; transform:rotate(0) scale(1); }
+    :root[data-theme="light"] .theme-toggle .sun{ opacity:1; transform:rotate(0) scale(1); }
+    :root[data-theme="light"] .theme-toggle .moon{ opacity:0; transform:rotate(90deg) scale(.3); }
+
+    /* ===== Transisi tema (tirai lingkaran) ===== */
+    ::view-transition-old(root),
+    ::view-transition-new(root){ animation:none; mix-blend-mode:normal; }
+    ::view-transition-old(root){ z-index:1; }
+    ::view-transition-new(root){ z-index:2; }
+    html.theme-fade, html.theme-fade *{
+      transition:background-color .6s ease, color .6s ease, border-color .6s ease !important;
     }
 
-    .link-button:hover {
-      background: rgba(255,255,255,0.08);
-      box-shadow: 0 0 20px rgba(255,255,255,0.15);
-      transform: translateY(-4px);
-      border-color: rgba(255,255,255,0.8);
-    }
-    .social-container {
-      margin-top: 40px;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: 0.9s ease;
-    }
-    .social-container.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .social-container p {
-      font-size: 13px;
-      color: #bbb;
-      margin-bottom: 14px;
-    }
-    .social-icons {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-    }
-    .social-icon {
-      width: 52px;
-      height: 52px;
-      padding: 6px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.03);
-      transition: .4s ease;
-    }
-    .social-icon:hover {
-      transform: scale(1.15) translateY(-4px);
-      box-shadow: 0 0 18px rgba(255,255,255,0.2);
+    /* ===== Konten ===== */
+    .link-container{
+      width:100%;
+      max-width:700px;
+      padding:0 20px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
     }
 
-    .support-text {
-      margin-top: 18px;
-      font-size: 13px;
-      color: #ccc;
+    .reveal{
+      opacity:0;
+      transform:translateY(36px);
+      transition:opacity .9s ease, transform .9s cubic-bezier(.19,1,.22,1);
+    }
+    .reveal.show{ opacity:1; transform:translateY(0); }
+
+    .profile-wrap{
+      position:relative;
+      width:208px; height:208px;
+      margin:20px auto;
+      border-radius:50%;
+      transform:scale(.85);
+    }
+    .profile-wrap.show{ transform:scale(1); }
+    .profile-wrap::before{
+      content:""; position:absolute; inset:-5px; border-radius:50%;
+      background:conic-gradient(from 0deg, var(--accent), transparent 35%, var(--accent) 70%, transparent);
+      animation:spin 9s linear infinite;
+      -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+              mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+    }
+    .profile-wrap::after{
+      content:""; position:absolute; inset:-18px; border-radius:50%;
+      background:radial-gradient(circle, var(--accent-soft), transparent 68%);
+      z-index:-1;
+      animation:pulse 4.5s ease-in-out infinite;
+    }
+    @keyframes spin{ to{ transform:rotate(360deg); } }
+    @keyframes pulse{ 50%{ transform:scale(1.12); opacity:.6; } }
+    .profile-image{
+      display:block; width:100%; height:100%;
+      border-radius:50%; object-fit:cover;
+      border:4px solid var(--bg);
     }
 
-    .support-text a {
-      color: #fff;
-      font-weight: 500;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.4);
+    .profile-caption{
+      margin:14px 0 0;
+      font-size:16px;
+      line-height:1.7;
+      color:var(--muted);
+      max-width:560px;
+    }
+    .profile-caption.title{
+      font-family:'Cormorant Garamond',serif;
+      font-size:30px;
+      font-weight:700;
+      letter-spacing:2px;
+      color:var(--text);
+      background:linear-gradient(100deg, var(--text) 30%, var(--accent) 50%, var(--text) 70%);
+      background-size:250% 100%;
+      -webkit-background-clip:text; background-clip:text;
+      -webkit-text-fill-color:transparent;
+      animation:shine 6s ease-in-out infinite;
+    }
+    @keyframes shine{ 0%,100%{ background-position:100% 0; } 50%{ background-position:0 0; } }
+
+    .links{
+      width:100%;
+      max-width:520px;
+      margin-top:28px;
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+    }
+    /* Jika jumlah tombol ganjil, tombol terakhir di tengah */
+    .links .link-button:last-child:nth-child(odd){
+      grid-column:1 / -1;
+      justify-self:center;
+      width:calc(50% - 7px);
+    }
+    .links-msg{ grid-column:1 / -1; color:var(--muted); font-size:14px; }
+
+    /* Fashl "Segera hadir" */
+    .link-button .sub{
+      display:block; margin-top:2px;
+      font-family:'Source Sans 3',sans-serif;
+      font-weight:400; font-size:12px; letter-spacing:.5px;
+      color:var(--muted);
+    }
+    .link-button.soon{
+      cursor:default; pointer-events:none;
+      border-style:dashed;
+      background:var(--glass);
+    }
+    .link-button.soon::before{ display:none; }
+    .link-button.soon.show{ opacity:.55; }
+
+    .link-button{
+      --mx:50%; --my:50%;
+      position:relative;
+      display:block;
+      width:100%;
+      margin:0;
+      padding:18px 12px;
+      text-align:center;
+      text-decoration:none;
+      color:var(--text);
+      background:
+        radial-gradient(180px circle at var(--mx) var(--my), var(--spot), transparent 70%),
+        var(--glass);
+      border:1px solid var(--line);
+      border-radius:40px;
+      font-family:'Cormorant Garamond',serif;
+      font-weight:600;
+      font-size:19px;
+      letter-spacing:1.5px;
+      overflow:hidden;
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      transition:opacity .9s ease, transform .6s cubic-bezier(.19,1,.22,1), border-color .4s, box-shadow .4s;
+    }
+    .link-button::before{
+      content:""; position:absolute; top:0; left:-100%; width:100%; height:100%;
+      background:linear-gradient(120deg, transparent, var(--accent-soft), transparent);
+      transition:left .8s;
+    }
+    .link-button:hover::before{ left:100%; }
+    .link-button.show:hover{
+      transform:translateY(-4px) scale(1.02);
+      border-color:var(--line-strong);
+      box-shadow:var(--shadow);
+    }
+    .link-button.show:active{ transform:scale(.97); }
+    .link-button:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+
+    /* ===== Pengunjung ===== */
+    .visitor-wrapper{ margin-top:40px; display:flex; justify-content:center; padding:0 20px; }
+    .visitor-card{
+      display:flex; align-items:center; gap:18px;
+      padding:18px 30px;
+      border-radius:20px;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      transition:transform .4s ease, border-color .4s ease;
+    }
+    .visitor-card:hover{ transform:translateY(-4px); border-color:var(--line-strong); }
+    .visitor-icon{ font-size:30px; animation:float 3.2s ease-in-out infinite; }
+    @keyframes float{ 50%{ transform:translateY(-5px) rotate(-6deg); } }
+    .visitor-info{ text-align:left; }
+    .visitor-label{ font-size:13px; letter-spacing:1px; color:var(--muted); }
+    .visitor-number{
+      font-family:'Cormorant Garamond',serif;
+      font-size:38px; font-weight:700; line-height:1.1;
+      color:var(--accent); letter-spacing:1px;
+      font-variant-numeric:tabular-nums;
     }
 
-    .copyright {
-      margin-top: 14px;
-      font-size: 11px;
-      letter-spacing: .6px;
-      color: rgba(255,255,255,.35);
+    /* ===== Sosial ===== */
+    .social-container{ margin-top:40px; padding:0 20px; text-align:center; }
+    .social-container p{ font-size:13px; color:var(--muted); margin:0 0 14px; }
+    .social-icons{ display:flex; justify-content:center; gap:24px; }
+    .social-icon{
+      width:52px; height:52px; padding:7px;
+      border-radius:16px;
+      background:var(--icon-bg);
+      border:1px solid var(--line);
+      transition:transform .4s cubic-bezier(.34,1.56,.64,1), box-shadow .4s;
     }
+    .social-icon:hover{ transform:scale(1.15) translateY(-4px) rotate(-4deg); box-shadow:var(--shadow); }
+    .support-text{ margin-top:18px; font-size:13px; color:var(--muted); }
+    .support-text a{
+      color:var(--text); font-weight:500; text-decoration:none;
+      border-bottom:1px solid var(--accent);
+      transition:color .3s;
+    }
+    .support-text a:hover{ color:var(--accent); }
+    .copyright{ margin-top:14px; font-size:11px; letter-spacing:.6px; color:var(--muted); opacity:.7; }
 
     @media(max-width:600px){
-      .link-button{
-        padding:14px 28px;
-        font-size:16px;
-      }
-      .profile-image{
-        width:150px;
-        height:150px;
-      }
+      .link-button{ padding:15px 8px; font-size:16px; letter-spacing:1px; }
+      .links{ gap:12px; }
+      .links .link-button:last-child:nth-child(odd){ width:calc(50% - 6px); }
+      .profile-wrap{ width:160px; height:160px; }
+      .profile-caption.title{ font-size:26px; }
     }
-	.visitor-wrapper{
-	margin-top: 40px;
-	display: flex;
-	justify-content: center;
-	}
-
-.visitor-card{
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 18px 28px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 0 25px rgba(255,215,0,0.08);
-  transition: .4s ease;
-}
-
-.visitor-card:hover{
-  transform: translateY(-4px);
-  box-shadow: 0 0 35px rgba(255,215,0,0.2);
-}
-
-.visitor-icon{
-  font-size: 28px;
-}
-
-.visitor-label{
-  font-size: 13px;
-  letter-spacing: 1px;
-  color: #bbb;
-}
-
-.visitor-number{
-  font-size: 36px;
-  font-weight: 600;
-  font-family: 'Cormorant Garamond', serif;
-  color: gold;
-  letter-spacing: 1px;
-}
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{ animation:none !important; }
+      .letter{ display:none; }
+      .reveal{ transition:opacity .4s ease; transform:none; }
+    }
   </style>
 </head>
 <body>
 
-<div class="link-container">
-  <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766832638/aasa_ljciat.png" alt="Profil" class="profile-image">
-  <p class="profile-caption">ASAH FAHAM ILMU NAHWU</p>
-  <p class="profile-caption">Kuis ini hanyalah kuis sederhana, setidaknya bisa membantu anda untuk kembali ke dimensi renung pribadi dan kembali mengais memori yang pernah hinggap di sanubari.</p>
-  <p class="profile-caption">Ikuti kuis ini dan tingkatkan pemahamanmu tentang ilmu Nahwu dan ilmu-ilmu lainnya.</p>
-
-  <a href="https://afhimna.github.io/q1/" class="link-button">FASHL-1</a>
-  <a href="https://afhimna.github.io/q2q/" class="link-button">FASHL-2</a>
-  <a href="https://afhimna.github.io/q3ss/" class="link-button">FASHL-3</a>
-  <a href="https://afhimna.github.io/q4/" class="link-button">FASHL-4</a>
-  <a href="https://afhimna.github.io/COOMING SOON4/" class="link-button">COOMING SOON</a>
+<div class="bg" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
 </div>
 
-<div class="visitor-wrapper">
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti mode gelap / terang" title="Ganti tema">
+  <svg class="moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+  <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+</button>
+
+<div class="link-container">
+  <div class="profile-wrap reveal">
+    <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766832638/aasa_ljciat.png" alt="Profil" class="profile-image">
+  </div>
+  <p class="profile-caption title reveal">ASAH FAHAM ILMU NAHWU</p>
+  <p class="profile-caption reveal">Kuis ini hanyalah kuis sederhana, setidaknya bisa membantu anda untuk kembali ke dimensi renung pribadi dan kembali mengais memori yang pernah hinggap di sanubari.</p>
+  <p class="profile-caption reveal">Ikuti kuis ini dan tingkatkan pemahamanmu tentang ilmu Nahwu dan ilmu-ilmu lainnya.</p>
+
+  <div class="links" id="links"></div>
+</div>
+
+<div class="visitor-wrapper reveal">
   <div class="visitor-card">
     <div class="visitor-icon">🪶</div>
     <div class="visitor-info">
@@ -248,56 +369,143 @@
   </div>
 </div>
 
-<div class="social-container">
+<div class="social-container reveal">
   <p>Temukan lebih banyak kuis ilmiah, info lebih lanjut hubungi:</p>
   <div class="social-icons">
-      <a href="https://www.instagram.com/umarhamdan_a/" target="_blank">
-          <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766738130/ig_nhlx8u.png" class="social-icon">
-      </a>
+    <a href="https://www.instagram.com/umarhamdan_a/" target="_blank" rel="noopener" aria-label="Instagram">
+      <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766738130/ig_nhlx8u.png" class="social-icon" alt="Instagram">
+    </a>
   </div>
   <div class="support-text">
-      Berkenan mendukung kami? <a href="https://afhimna.github.io/share" target="_blank">Klik di sini</a>.
+    Berkenan mendukung kami? <a href="https://afhimna.github.io/share" target="_blank" rel="noopener">Klik di sini</a>.
   </div>
-  <div class="copyright">
-      © 2025 Afhimna Dev. All Rights Reserved.
-  </div>
+  <div class="copyright">© 2025 Afhimna Dev. All Rights Reserved.</div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
-
   document.body.classList.add("loaded");
 
-  const intro = document.querySelectorAll(".profile-image, .profile-caption");
-  intro.forEach((el,i)=>{
-    setTimeout(()=> el.classList.add("show"), i*200);
-  });
+  /* Huruf Arab melayang di latar */
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(!reduce){
+    var letters = "ابتثجحخدذرزسشصضطظعغفقكلمنهوي".split("");
+    var bg = document.querySelector(".bg");
+    for(var i=0;i<16;i++){
+      var s = document.createElement("span");
+      s.className = "letter";
+      s.textContent = letters[Math.floor(Math.random()*letters.length)];
+      s.style.left = (Math.random()*96)+"%";
+      s.style.fontSize = (28+Math.random()*52)+"px";
+      s.style.animationDuration = (22+Math.random()*24)+"s";
+      s.style.animationDelay = (-Math.random()*40)+"s";
+      bg.appendChild(s);
+    }
+  }
 
-  const buttons = document.querySelectorAll(".link-button");
-  const supportSection = document.querySelector(".social-container");
-
-  let shownCount = 0;
-
-  const observer = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        entry.target.classList.add("show");
-        observer.unobserve(entry.target);
-        shownCount++;
-
-        if(shownCount === buttons.length){
-          setTimeout(()=>{
-            supportSection.classList.add("show");
-          },400);
-        }
+  /* Muncul berurutan */
+  var items = document.querySelectorAll(".reveal");
+  var order = 0;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        var el = en.target;
+        setTimeout(function(){ el.classList.add("show"); }, order*140);
+        order = Math.min(order+1, 8);
+        setTimeout(function(){ order = Math.max(order-1,0); }, 600);
+        io.unobserve(el);
       }
     });
-  },{threshold:.3});
+  },{threshold:.15});
+  items.forEach(function(el){ io.observe(el); });
 
-  buttons.forEach(btn=> observer.observe(btn));
+  /* Muat daftar fashl dari link.json */
+  var linksBox = document.getElementById("links");
 
+  function bindButton(b){
+    b.addEventListener("pointermove", function(e){
+      var r = b.getBoundingClientRect();
+      b.style.setProperty("--mx", (e.clientX-r.left)+"px");
+      b.style.setProperty("--my", (e.clientY-r.top)+"px");
+    });
+  }
+
+  function showMsg(text){
+    var p = document.createElement("p");
+    p.className = "links-msg";
+    p.textContent = text;
+    linksBox.appendChild(p);
+  }
+
+  fetch("link.json", { cache:"no-store" })
+    .then(function(res){
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    })
+    .then(function(list){
+      if(!Array.isArray(list) || !list.length){ showMsg("Belum ada fashl."); return; }
+      list.forEach(function(item){
+        var a = document.createElement("a");
+        a.className = "link-button reveal";
+        a.textContent = item.nama || "FASHL";
+        if(item.soon || !item.link){
+          a.classList.add("soon");
+          a.setAttribute("aria-disabled", "true");
+          a.setAttribute("tabindex", "-1");
+          var sub = document.createElement("span");
+          sub.className = "sub";
+          sub.textContent = "Segera hadir";
+          a.appendChild(sub);
+        }else{
+          a.href = item.link;
+        }
+        linksBox.appendChild(a);
+        bindButton(a);
+        io.observe(a);
+      });
+    })
+    .catch(function(err){
+      console.error("link.json error:", err);
+      showMsg("Daftar fashl gagal dimuat. Pastikan link.json ada satu folder dengan index.html.");
+    });
+
+  /* Mode gelap / terang */
+  var root = document.documentElement;
+  var btn = document.getElementById("themeToggle");
+  var meta = document.querySelector('meta[name="theme-color"]');
+
+  function applyTheme(t){
+    root.setAttribute("data-theme", t);
+    if(meta) meta.setAttribute("content", t === "light" ? "#f2f5fb" : "#07070a");
+    try{ localStorage.setItem("afhimna-theme", t); }catch(e){}
+  }
+  if(meta) meta.setAttribute("content", root.getAttribute("data-theme") === "light" ? "#f2f5fb" : "#07070a");
+
+  btn.addEventListener("click", function(){
+    var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+
+    if(!document.startViewTransition || reduce){
+      root.classList.add("theme-fade");
+      applyTheme(next);
+      setTimeout(function(){ root.classList.remove("theme-fade"); }, 700);
+      return;
+    }
+
+    var r = btn.getBoundingClientRect();
+    var x = r.left + r.width/2, y = r.top + r.height/2;
+    var radius = Math.hypot(Math.max(x, innerWidth-x), Math.max(y, innerHeight-y));
+
+    var t = document.startViewTransition(function(){ applyTheme(next); });
+    t.ready.then(function(){
+      root.animate(
+        { clipPath:["circle(0px at "+x+"px "+y+"px)", "circle("+radius+"px at "+x+"px "+y+"px)"] },
+        { duration:850, easing:"cubic-bezier(.65,0,.2,1)", pseudoElement:"::view-transition-new(root)" }
+      );
+    });
+  });
 });
 </script>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -314,39 +522,32 @@ document.addEventListener("DOMContentLoaded", function(){
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-
   const counterRef = doc(db, "visitor", "counter");
 
-  async function updateVisitorCount() {
-    await updateDoc(counterRef, {
-      count: increment(1)
-    });
-
-    const docSnap = await getDoc(counterRef);
-    animateCounter(docSnap.data().count);
+  function animateCounter(finalNumber) {
+    const el = document.getElementById("visitorCount");
+    const duration = 1400;
+    const startTime = performance.now();
+    function update(now) {
+      const p = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.innerText = Math.floor(eased * finalNumber).toLocaleString();
+      if (p < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
   }
 
-  updateVisitorCount();
-function animateCounter(finalNumber) {
-  let start = 0;
-  const duration = 1200;
-  const startTime = performance.now();
-
-  function update(currentTime) {
-    const progress = Math.min((currentTime - startTime) / duration, 1);
-    const value = Math.floor(progress * finalNumber);
-
-    document.getElementById("visitorCount").innerText =
-      value.toLocaleString();
-
-    if (progress < 1) {
-      requestAnimationFrame(update);
+  async function updateVisitorCount() {
+    try {
+      await updateDoc(counterRef, { count: increment(1) });
+      const docSnap = await getDoc(counterRef);
+      animateCounter(docSnap.data().count);
+    } catch (err) {
+      console.error("Counter error:", err);
     }
   }
 
-  requestAnimationFrame(update);
-}</script>
+  updateVisitorCount();
+</script>
 </body>
 </html>
-
-
